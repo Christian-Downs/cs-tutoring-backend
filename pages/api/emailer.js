@@ -22,7 +22,8 @@ export default async function handler(req, res) {
 
   console.log("mailing");
   if (req.method === "POST") {
-    const { email, subject, message } = req.body;
+
+    const { email, subject, message } = JSON.parse(req.body.body);
     res.setHeader("Access-Control-Allow-Origin", "*");
 
     const transporter = nodemailer.createTransport({
