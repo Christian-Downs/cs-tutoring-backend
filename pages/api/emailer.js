@@ -1,7 +1,26 @@
 import nodemailer from "nodemailer";
+import Cors from "cors";
+
+const cors = Cors({
+  methods: ["POST", "GET", "HEAD"],
+  origin: "*", // Adjust this to the specific origin you want to allow
+});
+
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
 
 export default async function handler(req, res) {
-    console.log("mailing");
+  await runMiddleware(req, res, cors);
+
+  console.log("mailing");
   if (req.method === "POST") {
     const { email, subject, message } = req.body;
     res.setHeader("Access-Control-Allow-Origin", "*");
